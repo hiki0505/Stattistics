@@ -24,6 +24,8 @@ SECRET_KEY = 'django-insecure-aa9qltplc0@7bal+kmyjcu9!mhleg3i8wtog7j1d7ti^aojhpm
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# Production flag: Set True if website is running on production, False - otherwise
+PROD_FLAG = True
 
 ALLOWED_HOSTS = ['198.199.87.198']
 
@@ -82,16 +84,28 @@ WSGI_APPLICATION = 'Data_plat.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'data_plat',
-        'USER': 'postgres',
-        'PASSWORD': 'predator0505',
-        'HOST': 'localhost',
-        'POST': '',
+if PROD_FLAG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'data_plat',
+            'USER': 'stattista_admin',
+            'PASSWORD': 'stattista135',
+            'HOST': 'localhost',
+            'POST': '',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'data_plat',
+            'USER': 'postgres',
+            'PASSWORD': 'predator0505',
+            'HOST': 'localhost',
+            'POST': '',
+        }
+    }
 
 
 # Password validation
