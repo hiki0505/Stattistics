@@ -27,7 +27,7 @@ DEBUG = True
 # Production flag: Set True if website is running on production, False - otherwise
 PROD_FLAG = True
 
-ALLOWED_HOSTS = ['198.199.87.198']
+ALLOWED_HOSTS = ['198.199.87.198', 'stattistics.com', 'www.stattistics.com']
 
 
 # Application definition
