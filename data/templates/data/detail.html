@@ -3,14 +3,20 @@
 {% block content%}
 {{ table_name }}
 
-<form class="Form" name="form" role="form" method="post" enctype="multipart/form-data" action="{% url 'detail' table_name %}">
+<form class="Form" name="form" role="form" method="post" enctype="multipart/form-data" action="{% url 'detail' table_name %}" style="padding-top: 10%;">
   {% csrf_token %}
-    {% for colname, coldesc in col_namedesc.items %}
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="column" value="{{ colname }}">
+    {% for coldesc in col_namedesc %}
+      <div class="form-check form-check-inline">-->
+        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="column" value="{{ coldesc }}">
         <label class="form-check-label" for="inlineCheckbox1">{{ coldesc }}</label>
       </div>
     {% endfor %}
+<!--    {% for colname, coldesc in col_namedesc.items %}-->
+<!--      <div class="form-check form-check-inline">-->
+<!--        <input class="form-check-input" type="checkbox" id="inlineCheckbox1" name="column" value="{{ colname }}">-->
+<!--        <label class="form-check-label" for="inlineCheckbox1">{{ coldesc }}</label>-->
+<!--      </div>-->
+<!--    {% endfor %}-->
   <button type="submit">Apply</button>
 </form>
 

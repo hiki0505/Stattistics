@@ -14,5 +14,6 @@ macrodata2_coldesc = ['Date of the data (end of month)', 'Year', 'Month', 'Year 
            'USDAZN exchange rate', 'Price of brand oil']
 
 data_to_cols = {
-    'macrodata2': dict(zip(macrodata2_colnames, macrodata2_coldesc))
+    'm_macro': dict(zip(macrodata2_colnames, macrodata2_coldesc))
+    # 'data_m_macro':
 }

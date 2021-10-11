@@ -19,8 +19,8 @@ from data import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.homepage, name='homepage'),
-    path('datapage', views.datapage, name='datapage'),
-    path('<str:table_name>', views.detail, name='detail'),
+    path('datapage/', views.datapage, name='datapage'),
+    path('datapage/<str:table_name>', views.detail, name='detail'),
     # path('detail', views.detail, name='detail'),
     # path('export', views.export, name='export')
     path('<str:table_name>/export', views.export, name='export')

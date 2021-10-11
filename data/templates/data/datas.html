@@ -1,30 +1,67 @@
 {% extends 'data/base.html' %}
 
 {% block content %}
-<div class="container w-75 m-auto" style="padding-top: 4%;">
-    <div class="mt-5">
-        <table class="table">
-            <thead class="thead-dark">
+<form class="Form" name="form" role="form" method="post" action="" style="padding-top: 10%;">
+    {% csrf_token %}
+    <div class="Form-title">Choose parameters for table:<br></div>
+    <div class="plist_container">
+        <table class="_table" id="plist_table">
+            <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Modified</th>
-                <th scope="col">Actions</th>
+                <th>Select frequency</th>
+                <th>Select topic</th>
             </tr>
             </thead>
-            <tbody>
-            {% for table in tables %}
+            <tbody id="table_body">
             <tr>
-                <th scope="row">1</th>
-                <td>{{ table }}</td>
-                <td>2020-03-16</td>
                 <td>
-                    <a href="{% url 'detail' table %}">View</a>
+                    <select name="freq" class="frq">
+                        <option value="">Choose an option</option>
+                        <option value="m">Monthly</option>
+                        <option value="q">Quarterly</option>
+                        <option value="a">Annual</option>
+                    </select>
+                </td>
+                <td>
+                    <select name="topic" class="tpc">
+                        <option value="">Choose an option</option>
+                        <option value="macro">Macro</option>
+                        <option value="tediyye">Tediyye</option>
+                        <option value="car">Car</option>
+                    </select>
                 </td>
             </tr>
-            {% endfor %}
             </tbody>
         </table>
     </div>
-</div>
+    <div class="Form-buttonContainer">
+        <button class="Form-button">Get data</button>
+    </div>
+</form>
+<!--<div class="container w-75 m-auto" style="padding-top: 4%;">-->
+<!--    <div class="mt-5">-->
+<!--        <table class="table">-->
+<!--            <thead class="thead-dark">-->
+<!--            <tr>-->
+<!--                <th scope="col">#</th>-->
+<!--                <th scope="col">Title</th>-->
+<!--                <th scope="col">Modified</th>-->
+<!--                <th scope="col">Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            {% for table in tables %}-->
+<!--            <tr>-->
+<!--                <th scope="row">1</th>-->
+<!--                <td>{{ table }}</td>-->
+<!--                <td>2020-03-16</td>-->
+<!--                <td>-->
+<!--                    <a href="{% url 'detail' table %}">View</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+<!--            {% endfor %}-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
 {% endblock %}
