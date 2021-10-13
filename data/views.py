@@ -47,12 +47,17 @@ def detail(request, table_name):
         print('vot tuta')
         print(request.POST)
         columns = ast.literal_eval(str(request.POST.getlist('column')))
-        cols_as_list = ', '.join(columns)
-        print(columns)
+        # cols_as_list = ', '.join(columns)
+        cols_as_seq = ''
+        for col in columns:
+            cols_as_seq += '"{}"'.format(col)
+            cols_as_seq += ','
+        print(cols_as_seq)
+        # print(columns)
         # query_str = '('
         # for c in columns:
         #     query_str += c
-        print(cols_as_list)
+        # print(cols_as_list)
         cursor = connections['default'].cursor()
         print(cursor)
         # data = pd.read_sql("select {cols_list} from {table_name}".format(cols_list=cols_as_list, table_name=table_name),
@@ -61,17 +66,55 @@ def detail(request, table_name):
         # cursor.execute("select {cols_list} from {table_name}".format(cols_list=cols_as_list, table_name=table_name))
         # cursor.execute(
         #     "select * from dict_variable where desc_en_vr in {cols_list}".format(cols_list=tuple(cols_as_list)))
-        query = '''select * from {table_name} where id_vr in 
-            (select id_vr from dict_variable where desc_en_vr in {cols_list})'''.format(
-            table_name=table_name, cols_list=tuple(columns))
-        # TODO - split varnames into cotations!!! - DONE
 
-        print(query)
-        cursor.execute(query)
+        # cursor.execute(f'''
+        # with temp as (
+        # select distinct tarix
+        # from {table_name}
+        # )
+        # ''')
+        #
+        # print()
+        cursor.execute('''
+        CREATE TEMP TABLE tabletemp
+        (
+        tarix timestamp
+        );
+        insert into tabletemp
+        select distinct tarix from {table_name} order by tarix;
+        '''.format(table_name=table_name))
+
+        for col in tuple(columns):
+            col.replace("'", "")
+            query1 = '''
+            ALTER TABLE tabletemp ADD COLUMN "{col_name}" numeric(38,10)
+            '''.format(col_name=col)
+            cursor.execute(query1)
+
+            query2 = '''
+            UPDATE tabletemp t SET "{col_name}" = t1.values FROM
+            (SELECT d.tarix, d.values FROM data_m_macro d
+             JOIN tabletemp t 
+             ON d.tarix = t.tarix
+             where id_vr = (select id_vr from dict_variable where desc_en_vr = '{col_name}')) t1
+             where t1.tarix = t.tarix
+            '''.format(col_name=col)
+            cursor.execute(query2)
+
+        # query = '''select * from {table_name} where id_vr in
+        #     (select id_vr from dict_variable where desc_en_vr in {cols_list})'''.format(
+        #     table_name=table_name, cols_list=tuple(columns))
+        # TODO - split varnames into cotations!!! - DONE
+        # ('Nominal GDP', 'Non-oil GDP')
+        # print(query)
+        cursor.execute('''select {cols} from tabletemp'''.format(cols=cols_as_seq[:-1]))
         query = cursor.fetchall()
         print('tut query')
         print(query)
         result_data = []
+        cursor.execute('''
+        DROP TABLE tabletemp;
+        ''')
         for result in query:
             result_data.append(dict(zip(columns, result)))
 
@@ -89,7 +132,7 @@ def detail(request, table_name):
     cursor = connections['default'].cursor()
     print(cursor)
     col_namedesc = []
-    cursor.execute("select desc_en_vr from dict_variable")
+    cursor.execute("SELECT DISTINCT desc_en_vr FROM data_m_macro JOIN dict_variable USING(id_vr)")
     col_namedesc = [item[0] for item in cursor.fetchall()]
     print(col_namedesc)
     # cursor.execute("select * from {} limit 0".format(table_name))
